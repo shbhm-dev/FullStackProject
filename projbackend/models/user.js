@@ -1,88 +1,74 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
-const crypto = require('crypto')
-const uuidv1 = require('uuid/v1')
-var userSchema = new Schema({
+var mongoose = require("mongoose");
+const crypto = require("crypto");
+const uuidv1 = require("uuid/v1");
 
-name : {
-    type : String,
-    required : true,
-    maxlength : 33,
-    trim : true
-},
- lastname : {
-    type : String,
-    required : false,
-    maxlength : 33,
-    trim : true
-
- },
- email : {
-     type : String,
-     trim : true,
-     required : true,
-     unique : true
- },
- encry_password : {
-     type : String,
-     trim : true,
-     required : true
- },
- userinfo : {
-    type : String,
-    trim : true
-
- },
- salt : String,
- role : {
-     type : number,
-     default : 0
- },
- purchases : {
-     type : Array,
-     default : []
- }
-
-
-})
-
-userSchema.virtual("password")
-.set(function(password) {
-     this._password = password
-     this.salt = uuidv1();
-     this.encry_password = this.securePassword(password)
-})
-.get(function () {
-
-    return this._password
-},{timestamps : true})
-
-
-
-userSchema.method = {
-    authenticare : function(password) {
-        return securePassword(plainpassword) === this.encry_password
+var userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      maxlength: 32,
+      trim: true
     },
-
-
-    securePassword : function (plainpassword) {
-        if(!plainpassword)
-        return ""
-        try{
-            crypto.createHmac('sha256', secret)
-            .update(plainpassword)
-                   .digest('hex');
-
-
-        }catch(err)
-        {
-            return '';
-        }
-
-
+    lastname: {
+      type: String,
+      maxlength: 32,
+      trim: true
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true
+    },
+    userinfo: {
+      type: String,
+      trim: true
+    },
+    encry_password: {
+      type: String,
+      required: true
+    },
+    salt: String,
+    role: {
+      type: Number,
+      default: 0
+    },
+    purchases: {
+      type: Array,
+      default: []
     }
+  },
+  { timestamps: true }
+);
 
+userSchema
+  .virtual("password")
+  .set(function(password) {
+    this._password = password;
+    this.salt = uuidv1();
+    this.encry_password = this.securePassword(password);
+  })
+  .get(function() {
+    return this._password;
+  });
 
-}
+userSchema.methods = {
+  autheticate: function(plainpassword) {
+    return this.securePassword(plainpassword) === this.encry_password;
+  },
 
-module.exports = mongoose.model("User",userSchema)
+  securePassword: function(plainpassword) {
+    if (!plainpassword) return "";
+    try {
+      return crypto
+        .createHmac("sha256", this.salt)
+        .update(plainpassword)
+        .digest("hex");
+    } catch (err) {
+      return "";
+    }
+  }
+};
+
+module.exports = mongoose.model("User", userSchema);
