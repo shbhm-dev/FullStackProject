@@ -4,7 +4,11 @@ require('dotenv').config({path:'./.env'})
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
+
+
+//ROUTES 
 const authRoutes = require("./routes/auth")
+const userRoutes = require("./routes/user")
 
 
 //DB CONNECTIONS
@@ -30,6 +34,7 @@ const Port =  process.env.Port ||  8000;
 //MY ROUTES
 
 app.use("/api",authRoutes)
+app.use("/api",userRoutes)
 
 
 
