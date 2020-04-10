@@ -17,9 +17,10 @@ next()
 }
 exports.createCategory = (req,res) => {
 
+
 const category = new Category(req.body)
-Category.save(category).exec((error,category) => {
-    if(err)
+category.save((error,category) => {
+    if(error)
     {
       return res.status(400).json({
           err : "Not able to save category in DB"
@@ -51,8 +52,8 @@ exports.getAllCategory = (req,res) => {
 exports.updateCategory = (req,res) => {
     const category = req.category;
     category.name = req.body.name;
-    Category.save(category).exec((error,updatedCategory) => {
-        if(err)
+    category.save((error,updatedCategory) => {
+        if(error)
         {
           return res.status(400).json({
               err : "Failed to update category in DB"
@@ -67,7 +68,7 @@ exports.updateCategory = (req,res) => {
 exports.removeCategory = (req,res) => {
 
     const category = req.category;
-    Category.remove((err,category) => {
+    category.remove((err,category) => {
         if(err)
         {
           return res.status(400).json({

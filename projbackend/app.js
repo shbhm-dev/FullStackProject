@@ -10,6 +10,7 @@ const cors = require("cors")
 const authRoutes = require("./routes/auth")
 const userRoutes = require("./routes/user")
 const categoryRoutes = require("./routes/category")
+const productRoutes = require("./routes/product")
 
 
 //DB CONNECTIONS
@@ -37,6 +38,7 @@ const Port =  process.env.Port ||  8000;
 app.use("/api",authRoutes)
 app.use("/api",userRoutes)
 app.use("/api",categoryRoutes)
+app.use("/api",productRoutes)
 
 
 

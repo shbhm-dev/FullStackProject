@@ -13,7 +13,7 @@ router.param("categoryID",getCategoryById)
 //Actual Routes
 
 router.post("/category/create/:userID",isSignedIn,isAuthenticated,isAdmin,createCategory)
-router.post("/category/:categoryID/:userID",isSignedIn,isAuthenticated,isAdmin,updateCategory)
+router.put("/category/:categoryID/:userID",isSignedIn,isAuthenticated,isAdmin,updateCategory)
 router.delete("/category/:categoryID/:userID",isSignedIn,isAuthenticated,isAdmin,removeCategory)
 router.get("/category/:categoryID",getCategory)
 router.get("/category/categories",getAllCategory)
